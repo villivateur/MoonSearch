@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>IP 地区查询</title>
+  <style>
+    :root {
+      --page-bg: #ffffff;
+      --panel-border: rgba(15, 23, 42, 0.08);
+      --panel-shadow: 0 28px 80px rgba(15, 23, 42, 0.08);
+      --text-main: #0f172a;
+      --text-muted: #5b6474;
+      --accent: #0f766e;
+      --accent-strong: #115e59;
+      --danger: #b42318;
+      --field-border: rgba(15, 23, 42, 0.12);
+      --field-focus: rgba(15, 118, 110, 0.22);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Avenir Next", "Segoe UI", "PingFang SC", "Hiragino Sans GB", sans-serif;
+      color: var(--text-main);
+      background:
+        radial-gradient(circle at top left, rgba(15, 118, 110, 0.08), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(148, 163, 184, 0.12), transparent 35%),
+        var(--page-bg);
+    }
+
+    .shell {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 32px 20px;
+    }
+
+    .panel {
+      width: min(760px, 100%);
+      padding: 44px;
+      border: 1px solid var(--panel-border);
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: var(--panel-shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    .subtitle {
+      margin: 14px 0 0;
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--text-muted);
+    }
+
+    form {
+      margin-top: 34px;
+    }
+
+    .field {
+      width: 100%;
+      padding: 22px 24px;
+      border: 1px solid var(--field-border);
+      border-radius: 20px;
+      font-size: 1.2rem;
+      color: var(--text-main);
+      background: #ffffff;
+      outline: none;
+      transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+    }
+
+    .field:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 8px var(--field-focus);
+      transform: translateY(-1px);
+    }
+
+    .actions {
+      margin-top: 16px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .button {
+      min-width: 220px;
+      border: none;
+      border-radius: 999px;
+      padding: 16px 28px;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: #ffffff;
+      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+      cursor: pointer;
+      box-shadow: 0 16px 34px rgba(15, 118, 110, 0.24);
+      transition: transform 160ms ease, box-shadow 160ms ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 20px 40px rgba(15, 118, 110, 0.28);
+    }
+
+    .button:active {
+      transform: translateY(0);
+    }
+
+    .feedback {
+      margin-top: 26px;
+      padding: 20px 22px;
+      border-radius: 20px;
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    .feedback.result {
+      background: rgba(15, 118, 110, 0.08);
+      color: var(--text-main);
+    }
+
+    .feedback.error {
+      background: rgba(180, 35, 24, 0.08);
+      color: var(--danger);
+    }
+
+    .stats {
+      margin-top: 26px;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    @media (max-width: 640px) {
+      .panel {
+        padding: 28px 22px;
+        border-radius: 24px;
+      }
+
+      .field {
+        padding: 18px 18px;
+        font-size: 1.05rem;
+      }
+
+      .button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="panel">
+      <h1>IP 地区查询</h1>
+      <p class="subtitle">输入一个合法的 IPv4 或 IPv6 地址，后端会基于启动时加载到内存中的 CIDR 数据快速匹配其所属国家或地区。</p>
+
+      <form method="post">
+        <input
+          class="field"
+          type="text"
+          name="ip"
+          value="{{ ip_value }}"
+          placeholder="请输入合法的 IPv4 或 IPv6 地址"
+          autocomplete="off"
+          spellcheck="false"
+          required
+        >
+        <div class="actions">
+          <button class="button" type="submit">查询地区</button>
+        </div>
+      </form>
+
+      {% if result %}
+      <div class="feedback result">{{ result }}</div>
+      {% endif %}
+
+      {% if error %}
+      <div class="feedback error">{{ error }}</div>
+      {% endif %}
+
+      <div class="stats">
+        已预加载 {{ stats.country_count }} 个国家/地区代码，{{ stats.ipv4_networks }} 条 IPv4 网段，{{ stats.ipv6_networks }} 条 IPv6 网段。
+      </div>
+    </section>
+  </main>
+</body>
+</html>
