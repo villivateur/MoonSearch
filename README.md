@@ -1,0 +1,3 @@
+- Run or Deploy app.py to start the web server
+- It just works
+- Run update-cidr.py to update database from ipdeny.com
