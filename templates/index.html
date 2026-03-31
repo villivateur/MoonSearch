@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>IP 地区查询</title>
+  <link rel="icon" href="{{ url_for('static', filename='vvzero_64x64.ico') }}" type="image/x-icon">
+  <title>Moon Search</title>
   <style>
     :root {
       --page-bg: #ffffff;
@@ -161,8 +162,8 @@
 <body>
   <main class="shell">
     <section class="panel">
-      <h1>IP 地区查询</h1>
-      <p class="subtitle">输入一个合法的 IPv4 或 IPv6 地址，后端会基于启动时加载到内存中的 CIDR 数据快速匹配其所属国家或地区。</p>
+      <h1>Moon Search</h1>
+      <p class="subtitle">输入一个合法的 IPv4 或 IPv6 地址，后端会基于 ipdeny.com 提供的 CIDR 数据快速匹配其所属国家或地区。</p>
 
       <form method="post">
         <input
